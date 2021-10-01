@@ -2,8 +2,6 @@
 
 namespace TamoJuno;
 
-use GuzzleHttp\Exception\GuzzleException;
-
 /**
  * Class NewOnboarding
  *
@@ -23,8 +21,7 @@ class NewOnboarding extends Resource
     /**
      * @param array $form_params
      *
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function createOnboardingWhiteLabel(array $form_params = [])
     {

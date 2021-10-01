@@ -2,8 +2,6 @@
 
 namespace TamoJuno;
 
-use GuzzleHttp\Exception\GuzzleException;
-
 /**
  * Class Document
  *
@@ -20,8 +18,7 @@ class Document extends Resource
     }
 
     /**
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function getDocuments()
     {
@@ -31,8 +28,7 @@ class Document extends Resource
     /**
      * @param $id
      *
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function getDocument($id)
     {
@@ -40,11 +36,10 @@ class Document extends Resource
     }
 
     /**
-     * @param $id
+     * @param null $id
      * @param array $form_params
      *
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function uploadDocuments($id = null, array $form_params = [])
     {

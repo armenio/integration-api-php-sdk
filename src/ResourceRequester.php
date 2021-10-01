@@ -2,10 +2,10 @@
 
 namespace TamoJuno;
 
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\GuzzleException;
 use Psr\Http\Message\ResponseInterface;
 use TamoJuno\Http\Client;
+use Zend\Http\Response;
+use Zend\Json\Json;
 
 /**
  * Class ResourceRequester
@@ -21,7 +21,7 @@ class ResourceRequester
     public $client;
 
     /**
-     * @var ResponseInterface
+     * @var Response
      */
     public $lastResponse;
 
@@ -35,7 +35,7 @@ class ResourceRequester
      */
     public function __construct()
     {
-        $this->client = new Client;
+        $this->client = new Client();
     }
 
     /**
@@ -43,33 +43,33 @@ class ResourceRequester
      * @param $endpoint
      * @param array $options
      *
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function request($method, $endpoint, array $options = [])
     {
         $this->lastOptions = $options;
+
         try {
             $response = $this->client->request($method, $endpoint, $options);
-        } catch (ClientException $e) {
-            $response = $e->getResponse();
+        } catch (\Exception $e) {
+            $response = $e;
         }
 
         return $this->response($response);
     }
 
     /**
-     * @param ResponseInterface $response
+     * @param Response $response
      *
      * @return mixed
      */
-    public function response(ResponseInterface $response)
+    public function response(Response $response)
     {
         $this->lastResponse = $response;
 
-        $content = $response->getBody()->getContents();
+        $content = $response->getBody();
 
-        $decoded = json_decode($content);
+        $decoded = Json::decode($content);
         $data = $decoded;
 
         if (empty($decoded)) {

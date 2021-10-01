@@ -5,7 +5,6 @@ namespace Test;
 use stdClass;
 use TamoJuno\ResourceRequester;
 use TamoJuno\Resource;
-use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 
 class ResourceTest extends TestCase

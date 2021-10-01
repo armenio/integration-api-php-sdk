@@ -2,8 +2,6 @@
 
 namespace TamoJuno;
 
-use GuzzleHttp\Exception\GuzzleException;
-
 /**
  * Class Webhook
  *
@@ -23,8 +21,7 @@ class Webhook extends Resource
     /**
      * @param array $form_params
      *
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function createWebhook(array $form_params = [])
     {

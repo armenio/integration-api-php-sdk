@@ -2,8 +2,6 @@
 
 namespace TamoJuno;
 
-use GuzzleHttp\Exception\GuzzleException;
-
 /**
  * Class Transfer
  *
@@ -23,8 +21,7 @@ class Transfer extends Resource
     /**
      * @param array $form_params
      *
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function createTransfer(array $form_params = [])
     {

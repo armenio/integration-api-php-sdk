@@ -2,17 +2,38 @@
 
 namespace TamoJuno\Http;
 
-use GuzzleHttp\Client as Guzzle;
-use GuzzleHttp\Exception\GuzzleException;
 use TamoJuno\Config;
+use Zend\Http\Client as ZendHttpClient;
+use Zend\Http\Response;
+use Zend\Json\Json;
 
 /**
  * Class Client
  *
  * @package TamoJuno\Http
  */
-class Client extends Guzzle
+class Client
 {
+    protected $config = [];
+
+    /**
+     * @return array
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
+     * @param array $config
+     *
+     * @return Client
+     */
+    public function setConfig($config)
+    {
+        $this->config = $config;
+        return $this;
+    }
 
     /**
      * Client constructor.
@@ -21,57 +42,82 @@ class Client extends Guzzle
      */
     public function __construct(array $config = [])
     {
-        try {
-            $config = array_merge([
-                'base_uri' => Config::getResourceUrl(),
-                'headers' => [
-                    'Content-Type' => 'application/json;charset=utf-8',
-                    'X-Api-Version' => '2',
-                    'X-Resource-Token' => Config::getPrivateToken(),
-                    'Authorization' => 'Bearer ' . $this->generateAuthenticationCurl(),
-                ],
-            ], $config);
+        $config = array_merge([
+            'headers' => [
+                'Content-Type' => 'application/json;charset=UTF-8',
+                'X-Api-Version' => '2',
+                'X-Resource-Token' => Config::getPrivateToken(),
+                'Authorization' => 'Bearer ' . $this->generateAuthenticationToken(),
+            ],
+        ], $config);
 
-            if (
-                null !== Config::getXIdempotencyKey()
-                && ! array_key_exists('X-Idempotency-Key', $config['headers'])
-            ) {
-                $config['headers']['X-Idempotency-Key'] = Config::getXIdempotencyKey();
-            }
-        } catch (GuzzleException $e) {
-            // print_r($e->getResponse()->getBody()->getContents());
+        if (! empty(Config::getXIdempotencyKey())
+            && ! array_key_exists('X-Idempotency-Key', $config['headers'])
+        ) {
+            $config['headers']['X-Idempotency-Key'] = Config::getXIdempotencyKey();
         }
-        parent::__construct($config);
+
+        $this->setConfig($config);
+    }
+
+    /**
+     * @param $method
+     * @param $uri
+     * @param $options
+     *
+     * @return Response
+     */
+    public function request($method, $uri, $options)
+    {
+        $client = new ZendHttpClient($uri);
+        $client->setAdapter(new ZendHttpClient\Adapter\Socket());
+        $client->setMethod(mb_strtoupper($method));
+        $client->setHeaders($this->config['headers']);
+
+        if (! empty($options)) {
+            if (isset($options['json'])) {
+                $client->setRawBody(Json::encode($options['json']));
+            } elseif (isset($options['query'])) {
+                $client->setParameterGet($options['query']);
+            } elseif (isset($options['post'])) {
+                $client->setParameterPost($options['post']);
+            } else {
+                if ('POST' === mb_strtoupper($method)) {
+                    $client->setParameterPost($options);
+                } else {
+                    $client->setParameterGet($options);
+                }
+            }
+        }
+
+        try {
+            $response = $client->send();
+        } catch (\Exception $e) {
+            die('junoClient');
+        }
+
+        return $response;
     }
 
     /**
      * @return string|null
      */
-    private function generateAuthenticationCurl(): ?string
+    private function generateAuthenticationToken(): ?string
     {
-
-        $curl = curl_init();
-
-        $credentials = base64_encode(Config::getClientId() . ":" . Config::getClientSecret());
-
-        curl_setopt_array($curl, [
-            CURLOPT_URL => Config::getAuthUrl(),
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => "grant_type=client_credentials",
-            CURLOPT_HTTPHEADER => [
-                'Authorization: Basic ' . $credentials,
-                'Content-Type: application/x-www-form-urlencoded',
-            ],
+        $client = new ZendHttpClient(Config::getAuthUrl());
+        $client->setAdapter(new ZendHttpClient\Adapter\Socket());
+        $client->setMethod('POST');
+        $client->setAuth(Config::getClientId(), Config::getClientSecret());
+        $client->setParameterPost([
+            'grant_type' => 'client_credentials',
         ]);
 
-        $response = json_decode(curl_exec($curl), true);
-        curl_close($curl);
+        try {
+            $response = Json::decode($client->send()->getBody(), true);
+        } catch (\Exception $e) {
+            die('junoClient');
+        }
+
         return $response['access_token'];
     }
 }

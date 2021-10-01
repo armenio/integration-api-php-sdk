@@ -2,8 +2,6 @@
 
 namespace TamoJuno;
 
-use GuzzleHttp\Exception\GuzzleException;
-
 /**
  * Class Data
  *
@@ -20,8 +18,7 @@ class Data extends Resource
     }
 
     /**
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function getBanks()
     {
@@ -29,8 +26,7 @@ class Data extends Resource
     }
 
     /**
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function getCompanyTypes()
     {
@@ -38,8 +34,7 @@ class Data extends Resource
     }
 
     /**
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function getBusinessAreas()
     {

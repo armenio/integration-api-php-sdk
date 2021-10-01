@@ -2,8 +2,6 @@
 
 namespace TamoJuno;
 
-use GuzzleHttp\Exception\GuzzleException;
-
 /**
  * Class PicPay
  *
@@ -23,8 +21,7 @@ class PicPay extends Resource
     /**
      * @param array $form_params
      *
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function createQRCode(array $form_params = [])
     {
@@ -35,8 +32,7 @@ class PicPay extends Resource
      * @param $id
      * @param array $form_params
      *
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function cancelQRCode($id, array $form_params = [])
     {

@@ -2,8 +2,6 @@
 
 namespace TamoJuno;
 
-use GuzzleHttp\Exception\GuzzleException;
-
 /**
  * Class Plan
  *
@@ -23,8 +21,7 @@ class Plan extends Resource
     /**
      * @param array $form_params
      *
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function createPlan(array $form_params = [])
     {
@@ -35,8 +32,7 @@ class Plan extends Resource
      * @param $id
      * @param array $form_params
      *
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function activation($id, array $form_params = [])
     {
@@ -47,8 +43,7 @@ class Plan extends Resource
      * @param $id
      * @param array $form_params
      *
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function deactivation($id, array $form_params = [])
     {
@@ -58,8 +53,7 @@ class Plan extends Resource
     /**
      * @param $id
      *
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function getPlan($id)
     {

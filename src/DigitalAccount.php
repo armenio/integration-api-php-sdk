@@ -2,8 +2,6 @@
 
 namespace TamoJuno;
 
-use GuzzleHttp\Exception\GuzzleException;
-
 /**
  * Class DigitalAccount
  *
@@ -23,8 +21,7 @@ class DigitalAccount extends Resource
     /**
      * @param array $form_params
      *
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function createDigitalAccount(array $form_params = [])
     {
@@ -42,8 +39,7 @@ class DigitalAccount extends Resource
     /**
      * @param array $form_params
      *
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function updateDigitalAccount(array $form_params = [])
     {

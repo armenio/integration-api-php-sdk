@@ -2,8 +2,6 @@
 
 require __DIR__ . '/../../vendor/autoload.php';
 
-use GuzzleHttp\Exception\ClientException as GuzzleClientException;
-
 $args = [
     'PRIVATE_TOKEN' => 'YOUR_PRIVATE_TOKEN',
     'CLIENT_ID' => 'CLIENT_ID',
@@ -14,7 +12,7 @@ try {
     $dataService = new \TamoJuno\Data($args);
     $business = $dataService->getBusinessAreas();
     print_r($business);
-} catch (GuzzleClientException $e) {
+} catch (\Exception $e) {
     print_r($e->getResponse()->getBody()->getContents());
 
 }

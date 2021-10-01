@@ -2,8 +2,6 @@
 
 namespace TamoJuno;
 
-use GuzzleHttp\Exception\GuzzleException;
-
 /**
  * Class Payment
  *
@@ -23,8 +21,7 @@ class Payment extends Resource
     /**
      * @param array $form_params
      *
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function createPayment(array $form_params = [])
     {
@@ -36,8 +33,7 @@ class Payment extends Resource
      * @param null $action
      * @param array $form_params
      *
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function capture($id = null, $action = null, array $form_params = [])
     {
@@ -49,8 +45,7 @@ class Payment extends Resource
      * @param null $action
      * @param array $form_params
      *
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function refunds($id = null, $action = null, array $form_params = [])
     {

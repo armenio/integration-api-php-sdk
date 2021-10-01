@@ -1,8 +1,6 @@
 <?php
 
 namespace TamoJuno;
-
-use GuzzleHttp\Exception\GuzzleException;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -12,9 +10,8 @@ use Psr\Http\Message\ResponseInterface;
  */
 abstract class Resource
 {
-
     /**
-     * @var ResourceRequester
+     * @var ResourceRequester 
      */
     public $resource_requester;
 
@@ -54,7 +51,7 @@ abstract class Resource
             Config::setXIdempotencyKey($args[Config::X_IDEMPOTENCY_KEY]);
         }
 
-        $this->resource_requester = new ResourceRequester;
+        $this->resource_requester = new ResourceRequester();
     }
 
     /**
@@ -63,8 +60,8 @@ abstract class Resource
     abstract public function endpoint(): string;
 
     /**
-     * @param $id
-     * @param string $action
+     * @param int|null $id
+     * @param string|null $action
      *
      * @return string
      */
@@ -78,14 +75,13 @@ abstract class Resource
         if (! is_null($action)) {
             $endpoint .= '/' . $action;
         }
-        return $endpoint;
+        return rtrim(Config::getResourceUrl(), '/') . '/' . ltrim($endpoint, '/');
     }
 
     /**
      * @param array $form_params
      *
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function create(array $form_params = [])
     {
@@ -95,8 +91,7 @@ abstract class Resource
     /**
      * @param array $params
      *
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function allByQuery(array $params = [])
     {
@@ -104,8 +99,7 @@ abstract class Resource
     }
 
     /**
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function all()
     {
@@ -113,10 +107,9 @@ abstract class Resource
     }
 
     /**
-     * @param $id
+     * @param null $id
      *
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function retrieve($id = null)
     {
@@ -126,8 +119,7 @@ abstract class Resource
     /**
      * @param array $form_params
      *
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function updateSome(array $form_params = [])
     {
@@ -135,11 +127,10 @@ abstract class Resource
     }
 
     /**
-     * @param $id
+     * @param null $id
      * @param array $form_params
      *
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function update($id = null, array $form_params = [])
     {
@@ -147,11 +138,10 @@ abstract class Resource
     }
 
     /**
-     * @param $id
+     * @param null $id
      * @param array $form_params
      *
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function delete($id = null, array $form_params = [])
     {
@@ -159,11 +149,10 @@ abstract class Resource
     }
 
     /**
-     * @param $id
-     * @param string $action
+     * @param null $id
+     * @param null $action
      *
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function getById($id = null, $action = null)
     {
@@ -171,10 +160,9 @@ abstract class Resource
     }
 
     /**
-     * @param string $action
+     * @param null $action
      *
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function get($action = null)
     {
@@ -187,8 +175,7 @@ abstract class Resource
      * @param array $form_params
      * @param string $formType
      *
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function post($id = null, $action = null, array $form_params = [], $formType = 'json')
     {

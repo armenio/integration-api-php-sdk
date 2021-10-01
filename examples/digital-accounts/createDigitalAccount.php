@@ -2,8 +2,6 @@
 
 require __DIR__ . '/../../vendor/autoload.php';
 
-use \GuzzleHttp\Exception\ClientException as GuzzleClientException;
-
 $args = array(
     'PRIVATE_TOKEN' => 'YOUR_PRIVATE_TOKEN',
     'CLIENT_ID' => 'CLIENT_ID',
@@ -32,6 +30,6 @@ try {
     $digitalAccountService = new \TamoJuno\DigitalAccount($args);
     $newAccount = $digitalAccountService->createDigitalAccount($fields);
     print_r($newAccount);
-} catch (GuzzleClientException $e) {
+} catch (\Exception $e) {
     print_r($e->getResponse()->getBody()->getContents());
 }

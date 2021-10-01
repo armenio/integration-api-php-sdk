@@ -2,8 +2,6 @@
 
 namespace TamoJuno;
 
-use GuzzleHttp\Exception\GuzzleException;
-
 /**
  * Class Pix
  *
@@ -25,8 +23,7 @@ class Pix extends Resource
      * @param null $action
      * @param array $form_params
      *
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function createRandomKey($id = null, $action = null, array $form_params = [])
     {
@@ -38,8 +35,7 @@ class Pix extends Resource
      * @param null $action
      * @param array $form_params
      *
-     * @return object
-     * @throws GuzzleException
+     * @return mixed
      */
     public function createStaticQRCode($id = null, $action = null, array $form_params = [])
     {
